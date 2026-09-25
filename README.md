@@ -109,3 +109,7 @@ TCAD-PMOS-Process-Optimization/
 이 저장소는 2026년 4월 반도체집적공정 수업 중간 프로젝트의 결과를 포트폴리오 형태로 재구성한 것입니다. 수치와 이미지는 제출 보고서에서 확인했으며 시뮬레이션을 새로 실행해 만든 결과가 아닙니다.
 
 순차 탐색으로 얻은 결과이므로 모든 변수 조합에 대한 global optimum으로 해석하지 않습니다.
+
+---
+
+[← Back to Subin Joo's GitHub Portfolio](https://github.com/soybeanmilk0514-jpg)
