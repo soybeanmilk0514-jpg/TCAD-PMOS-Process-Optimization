@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TCAD PMOS Process Optimization</title>
+<meta name="description" content="Sentaurus TCAD study converting an NMOS process example to PMOS and optimizing implantation and annealing conditions.">
+<link rel="stylesheet" href="assets/css/project.css">
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand">Subin Joo · Semiconductor Portfolio</div><nav class="nav"><a href="./README.md">README</a><a href="./guide/00_navigation.md">GUIDE</a><a href="https://github.com/soybeanmilk0514-jpg/TCAD-PMOS-Process-Optimization">GITHUB</a></nav></div></header>
+<section class="hero"><div class="hero-in">
+<div class="eyebrow">TCAD · Process Optimization · Planar PMOS · 2026.04</div>
+<h1>TCAD PMOS<br>Process Optimization</h1>
+<p class="summary">기존 NMOS 공정 예제를 PMOS 구조와 바이어스로 변환하고, LDD와 Source/Drain implantation 및 annealing 조건을 단계적으로 비교해 drive current, leakage current, SS의 trade-off를 분석한 Sentaurus TCAD 프로젝트입니다.</p>
+<div class="meta"><div><span>Device</span><strong>Planar PMOS</strong></div><div><span>Tool</span><strong>Sentaurus TCAD</strong></div><div><span>Variables</span><strong>Implant + RTA</strong></div><div><span>Final SS</span><strong>85.321 mV/dec</strong></div></div>
+<div class="actions"><a class="btn primary" href="./guide/06_process_optimization.md">Optimization</a><a class="btn" href="./guide/07_final_results.md">Final Results</a><a class="btn" href="./source/">Source Scope</a></div>
+</div></section>
+<main>
+<section class="visual"><img src="./figures/final-results.png" alt="Final PMOS result"><div class="card"><h2>Selected condition</h2><p><b>LDD:</b> 1e13 cm⁻² · 4 keV</p><p><b>S/D:</b> 7e15 cm⁻² · 7 keV</p><p><b>Anneal:</b> 1000 °C · report parameter RTA=1</p><p><b>Vd:</b> -1.0 V</p></div></section>
+<section class="section"><div class="label">01 · CONVERSION</div><h2>NMOS example → PMOS process and bias</h2><p>Body / source-drain dopant polarity와 gate/drain bias 방향을 PMOS 동작에 맞게 변경하고, BF₂ 기반 LDD와 deep Source/Drain implantation을 적용했습니다.</p></section>
+<section class="section"><div class="label">02 · OPTIMIZATION</div><h2>공정변수를 한 단계씩 줄여가며 후보 선택</h2><div class="grid"><div class="metric"><span>Step 1</span><strong>LDD Dose</strong></div><div class="metric"><span>Step 2</span><strong>LDD Energy</strong></div><div class="metric"><span>Step 3</span><strong>S/D Dose</strong></div><div class="metric"><span>Step 4–5</span><strong>S/D Energy · RTA</strong></div></div><p class="note">Sequential search 결과이므로 모든 변수 조합에 대한 global optimum으로 해석하지 않습니다.</p></section>
+<section class="section"><div class="label">03 · FINAL ELECTRICAL RESULT</div><h2>Drive current, leakage, SS를 함께 평가</h2><div class="grid"><div class="metric"><span>|Id|</span><strong>1.210e-4 A/µm</strong></div><div class="metric"><span>|Ioff|</span><strong>2.581e-16 A/µm</strong></div><div class="metric"><span>SS</span><strong>85.321 mV/dec</strong></div><div class="metric"><span>Vtgm</span><strong>-1.175 V</strong></div></div></section>
+<section class="section"><div class="label">04 · REPRODUCIBILITY</div><h2>공개 가능한 source와 한계를 분리</h2><p>보고서에서 실제로 확인 가능한 SProcess command는 보존했고, 원본 SDevice/SVisual 전체 입력이 없는 부분은 임의로 재구성하지 않았습니다. RTA unit, metric extraction, very-small Ioff 해석 등은 limitations에 별도 기록했습니다.</p></section>
+<section class="section"><div class="label">05 · RESOURCES</div><h2>Documentation</h2><div class="resource"><a href="./guide/00_navigation.md"><strong>Project Guide</strong><span>PMOS 변환부터 결과까지</span></a><a href="./results/final_results.csv"><strong>Result CSV</strong><span>최종 electrical metrics</span></a><a href="./source/README.md"><strong>Source Scope</strong><span>공개 source와 재현성 범위</span></a><a href="./guide/08_limitations_and_next_steps.md"><strong>Limitations</strong><span>해석 한계와 next steps</span></a></div></section>
+</main>
+<footer class="foot">2026 Semiconductor Integrated Process Project · Subin Joo</footer>
+</body></html>
