@@ -1,0 +1,7 @@
+# Local tools and generated simulation outputs
+.DS_Store
+__pycache__/
+*.pyc
+*.log
+*.tdr
+*.plt
