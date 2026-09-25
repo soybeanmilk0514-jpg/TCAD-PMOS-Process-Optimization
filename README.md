@@ -1,80 +1,111 @@
-# PMOS 공정 조건 최적화
+# TCAD PMOS Process Optimization
 
-**주수빈 | 숭실대학교 신소재공학과 | 2026.04 | 반도체집적공정 중간 프로젝트**
+기존 NMOS 공정 예제를 **PMOS 구조와 바이어스 조건으로 변환**하고, LDD와 Source/Drain 이온주입 조건 및 열처리 변수를 단계적으로 비교한 Sentaurus TCAD 프로젝트입니다.
 
-NMOS 공정 예제를 PMOS 구조와 바이어스 조건으로 변경하고, LDD와 Source/Drain의 이온주입 조건 및 열처리 변수를 단계적으로 비교한 TCAD 프로젝트입니다. 구동 전류, 누설 전류, Subthreshold Swing(SS)을 함께 고려해 탐색한 조건 중 최종 후보를 선정했습니다.
+구동 전류, 누설 전류, Subthreshold Swing(SS)을 함께 고려해 평가한 조건 중 최종 후보를 선정했습니다.
 
-> 이 저장소는 제출한 중간보고서를 바탕으로 정리한 포트폴리오입니다. 수치와 이미지는 보고서에서 확인했으며, 시뮬레이션을 새로 실행한 결과가 아닙니다. 원본 실행 프로젝트는 포함되어 있지 않습니다.
+**Summary:**  
+This project converts an NMOS process example to PMOS and compares implantation and annealing conditions using Sentaurus TCAD, with drive current, leakage current, and subthreshold swing used as the main evaluation metrics.
 
-**Summary:** A coursework TCAD study converting an NMOS example to PMOS and selecting implantation and annealing parameters through staged comparisons of drive current, leakage current, and subthreshold swing.
+---
 
-## 핵심 결과
+## Results at a Glance
 
-보고서 28쪽 최종 표의 값을 전사했습니다. PMOS 전류는 부호가 음수이므로 목표와 비교할 때 크기(절댓값)를 사용했습니다.
+| Item | Final Result |
+|---|---:|
+| LDD | `1e13 cm^-2`, 4 keV |
+| Source/Drain | `7e15 cm^-2`, 7 keV |
+| RTA variable | 1 |
+| Anneal temperature | 1000 °C |
+| abs(Id) at Vd = -1.0 V | `1.210e-04 A/µm` |
+| abs(Ioff) at Vd = -1.0 V | `2.581e-16 A/µm` |
+| SS | 85.321 mV/dec |
+| Vtgm | -1.175 V |
 
-| 항목 | 목표 | 최종 결과 (Vd = -1.0 V) |
-|---|---:|---:|
-| 구동 전류 크기, abs(Id) | > 1×10⁻⁵ A/µm | 1.210×10⁻⁴ A/µm |
-| 누설 전류 크기, abs(Ioff) | < 1×10⁻¹⁴ A/µm | 2.581×10⁻¹⁶ A/µm |
-| SS | < 100 mV/dec | 85.321 mV/dec |
-| Vtgm | 별도 수치 목표 없음 | -1.175 V |
+![Final results](./figures/final-results.png)
 
-보고서에서 정의한 구동 전류의 게이트 전압은 -2.5 V, 누설 전류의 게이트 전압은 0 V입니다. 추출 코드는 제공되지 않아 해당 정의와 표의 실제 추출 방식이 일치하는지는 원본 코드 확인이 필요합니다. 위 전류 크기로 계산한 비율은 약 **4.688×10¹¹**입니다.
+*Figure. 보고서 최종 조건표와 전기적 결과.*
 
-![보고서 최종 조건 및 결과 표](figures/final-results.png)
+---
 
-## 최종 선정 조건
+## What Was Implemented
 
-| 변수 | 선정값 | 표기 및 근거 |
-|---|---:|---|
-| Lg | 0.25 | 보고서 고정값; 길이 단위는 원본 코드 확인 필요 |
-| NWell | 1×10¹⁷ | 체적 도핑 농도, cm⁻³ |
-| GOxTime | 10 | 산화 시간 변수; 단위는 원본 코드 확인 필요 |
-| LDD_Dose | 1×10¹³ cm⁻² | BF₂ 이온주입량 |
-| LDD_E | 4 keV | LDD 주입 에너지 |
-| SD_Dose | 7×10¹⁵ cm⁻² | BF₂ 이온주입량 |
-| SD_E | 7 keV | S/D 주입 에너지 |
-| RTA | 1 | 보고서에는 1 s로 설명; 캡처 코드에는 명시 단위 없음 |
-| 열처리 온도 | 1000 °C | 보고서의 SProcess 코드 캡처 |
-| Vg sweep | 0 → -2.5 V | PMOS 게이트 바이어스 |
+- Boron 기반 body 조건을 Phosphorus 기반 N-type body 조건으로 변경
+- LDD 및 Source/Drain implant를 BF₂ 기반 p-type implant로 변경
+- PMOS 동작에 맞춰 gate/drain bias 방향을 음전압으로 변경
+- LDD Dose → LDD Energy → S/D Dose → S/D Energy → RTA 순서로 조건 비교
+- drive current, leakage current, SS를 함께 고려해 후보 선정
+- 최종 PMOS 구조와 transfer curve 확인
+- 12개 TDR checkpoint로 공정 구조 변화 확인
 
-Dose는 단위 면적당 이온주입량이며, NWell의 체적 농도와 구분했습니다.
+---
 
-## 수행 내용
+## Read the Project
 
-- 기판 도펀트를 Boron에서 Phosphorus로 변경해 N형 body 조건 설정
-- LDD와 S/D 주입 도펀트를 BF₂로 변경해 P형 접합 구성
-- PMOS 동작에 맞춰 음의 게이트 전압 sweep 적용
-- LDD 주입량 → LDD 에너지 → S/D 주입량 → S/D 에너지 → RTA 순서로 조건 비교
-- 초기 단계에서 복수 후보를 유지하고 Ion/Ioff와 SS를 함께 비교해 최종 조건 선정
-- 도핑 분포, transfer curve 및 12개 공정 단계의 TDR 구조 확인
+| Page | Description |
+|---|---|
+| [Project Page](./index.md) | 프로젝트 목적, 구현 내용, 최종 결과를 한눈에 확인 |
+| [Detailed Navigation](./guide/00_navigation.md) | 모든 과정 문서와 source 위치 안내 |
+| [Project Overview](./guide/01_project_overview.md) | 문제 정의와 전체 흐름 |
+| [nMOS-to-PMOS Conversion](./guide/02_nmos_to_pmos_conversion.md) | dopant와 bias 변경 이유 |
+| [SProcess Implementation](./guide/03_sprocess_implementation.md) | implant와 anneal 설정 |
+| [SDevice Bias Setup](./guide/04_sdevice_bias_setup.md) | PMOS bias와 transfer curve |
+| [Process Flow Visualization](./guide/05_process_flow_visualization.md) | 12개 TDR 공정 단계 |
+| [Process Optimization](./guide/06_process_optimization.md) | 단계별 조건 탐색 |
+| [Final Results](./guide/07_final_results.md) | 최종 수치와 해석 |
+| [Limitations](./guide/08_limitations_and_next_steps.md) | 재현성 한계와 개선 방향 |
+| [Report Scope](./report/README.md) | 공개 범위와 원본 보고서 안내 |
 
-## 조건 선정 과정
+---
 
-| 단계 | 탐색값 | 다음 단계로 유지한 조건 |
-|---|---|---|
-| LDD Dose | 1~9×10¹³ cm⁻², 1×10¹³ 간격 | 1, 2, 3×10¹³ cm⁻² |
-| LDD Energy | 2, 4, 6, 8 keV | Dose 1×10¹³에서 4, 6, 8 keV |
-| S/D Dose | 6, 7, 8, 9×10¹⁵, 1, 2×10¹⁶ cm⁻² | LDD 4 keV + S/D 7×10¹⁵ cm⁻² |
-| S/D Energy | 5, 6, 7, 8, 9 keV | 7 keV |
-| RTA 변수 | 1, 2, 3, 4, 5 | 1 |
+## Source Code
 
-S/D 에너지 7 keV는 SS 단독 최솟값이 아니라 **Ion/Ioff와 SS를 함께 고려한 선택**입니다. 순차 탐색으로 얻은 결과이므로 전체 변수 조합에 대한 전역 최적해로 해석하지 않았습니다.
+| File | Description |
+|---|---|
+| [`source/sprocess/implant-anneal-excerpt.cmd`](./source/sprocess/implant-anneal-excerpt.cmd) | 보고서에서 확인 가능한 implant / spacer / anneal 핵심 command |
+| [`source/sprocess/README.md`](./source/sprocess/README.md) | SProcess source 범위 |
+| [`source/sdevice/README.md`](./source/sdevice/README.md) | SDevice bias 설정과 공개 범위 |
+| [`source/svisual/README.md`](./source/svisual/README.md) | 결과 지표와 extraction code 공개 범위 |
 
-## 상세 자료
+> `source/`에는 현재 확인 가능한 원본 command만 정리했습니다. 전체 mesh, physics, electrode, solve block을 포함하는 완전한 simulation deck을 임의로 재구성하지 않았습니다.
 
-- [프로젝트 범위와 PMOS 전환](docs/01-overview.md)
-- [단계별 탐색 과정과 근거 이미지](docs/02-optimization.md)
-- [결과 해석 및 확인이 필요한 사항](docs/03-results-and-limitations.md)
-- [12단계 공정 시각화](docs/04-process-flow.md)
-- [최종 수치 CSV](results/final-results.csv)
-- [코드 발췌 안내](source/README.md)
-- [원본 보고서 안내](report/README.md)
+---
 
-## 사용 도구
+## Repository Structure
 
-Sentaurus TCAD의 SProcess / SDevice / SVisual, Excel. 보고서의 도구 명칭과 코드 형식에 근거했으며 소프트웨어 버전은 확인되지 않았습니다.
+```text
+TCAD-PMOS-Process-Optimization/
+├── README.md
+├── index.md
+├── _config.yml
+├── guide/
+│   ├── 00_navigation.md
+│   ├── 01_project_overview.md
+│   ├── 02_nmos_to_pmos_conversion.md
+│   ├── 03_sprocess_implementation.md
+│   ├── 04_sdevice_bias_setup.md
+│   ├── 05_process_flow_visualization.md
+│   ├── 06_process_optimization.md
+│   ├── 07_final_results.md
+│   └── 08_limitations_and_next_steps.md
+├── figures/
+│   ├── final-results.png
+│   └── report-page-*.png
+├── source/
+│   ├── README.md
+│   ├── sprocess/
+│   ├── sdevice/
+│   └── svisual/
+├── results/
+│   └── final_results.csv
+└── report/
+    └── README.md
+```
 
-## 배운 점
+---
 
-주입량과 에너지를 높이는 것이 모든 지표의 개선으로 이어지지는 않았습니다. 구동 전류를 확보하면서 누설 전류와 SS를 함께 확인해야 했고, 다음 공정 변수와의 조합을 고려해 초기 단계에서 후보를 여러 개 유지했습니다. 공정 조건의 변화가 도핑 분포와 전기적 특성에 어떻게 나타나는지 연결해서 비교한 경험입니다.
+## Project Scope
+
+이 저장소는 2026년 4월 반도체집적공정 수업 중간 프로젝트의 결과를 포트폴리오 형태로 재구성한 것입니다. 수치와 이미지는 제출 보고서에서 확인했으며 시뮬레이션을 새로 실행해 만든 결과가 아닙니다.
+
+순차 탐색으로 얻은 결과이므로 모든 변수 조합에 대한 global optimum으로 해석하지 않습니다.

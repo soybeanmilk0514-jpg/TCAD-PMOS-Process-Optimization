@@ -1,0 +1,26 @@
+TCAD-PMOS-Process-Optimization portfolio restructuring package
+
+This package is an overlay for the existing public repository.
+
+Add / replace:
+- README.md
+- _config.yml
+- index.md
+- guide/00_navigation.md ~ guide/08_limitations_and_next_steps.md
+- source/README.md
+- source/sprocess/README.md
+- source/sdevice/README.md
+- source/svisual/README.md
+- results/final_results.csv
+
+Keep the existing files:
+- figures/*.png
+- source/sprocess/implant-anneal-excerpt.cmd
+- report/README.md
+- .gitignore
+
+After verifying the new guide links, the old docs/ folder and results/final-results.csv may be removed to avoid duplicate documentation.
+
+GitHub Pages:
+- _config.yml + index.md are included.
+- Pages still needs to be enabled for the repository in GitHub settings if it is not already enabled.
